@@ -47,3 +47,4 @@ TODO
 - translation on english
 - android support
 - setup.sh for termux and linux
+- config for apikey
