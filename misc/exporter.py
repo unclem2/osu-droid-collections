@@ -2,10 +2,10 @@ import os
 import shutil
 
 # Определяем путь к текущей директории
-current_dir = os.path.dirname(os.path.abspath(__file__))
-output_dir = os.path.abspath(os.path.join(current_dir, '..', 'output'))
+current_dir = os.getcwd()
+output_dir = os.path.abspath(os.path.join(current_dir, 'output'))
 collections_dir = os.path.join(output_dir, 'collections')
-misc_dir = os.path.join(current_dir, '..')
+misc_dir = os.path.join(current_dir, 'misc')
 
 def move_collection():
     print("Список доступных коллекций:")
@@ -35,10 +35,13 @@ def move_collection():
         return
     
     source_path = os.path.join(collections_dir, selected_collection)
-    destination_path = os.path.join(misc_dir, "favorite.json")
+    destination_path = os.path.join(misc_dir, selected_collection)
     
     try:
         shutil.move(source_path, destination_path)
+        new_filename = "favorite.json"
+        new_path = os.path.join(misc_dir, new_filename)
+        os.rename(destination_path, new_path)
         print("Коллекция успешно перемещена в папку 'misc' и переименована в 'favorite.json'.")
     except Exception as e:
         print(f"Ошибка при перемещении коллекции: {e}")

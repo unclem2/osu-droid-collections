@@ -1,21 +1,40 @@
+import os
 import json
-from tkinter import Tk, filedialog
-# Открываем диалоговое окно для выбора первого файла
-root = Tk()
-root.withdraw()
-file_path1 = filedialog.askopenfilename(title='Выберите первый файл')
-# Загружаем содержимое первого файла в переменную data1
-with open(file_path1, 'r') as file1:
-    data1 = json.load(file1)
-# Открываем диалоговое окно для выбора второго файла
-file_path2 = filedialog.askopenfilename(title='Выберите второй файл')
-# Загружаем содержимое второго файла в переменную data2
-with open(file_path2, 'r') as file2:
-    data2 = json.load(file2)
-# Объединяем два словаря в один
-data = {**data1, **data2}
-# Открываем диалоговое окно для выбора места сохранения объединенного файла
-save_path = filedialog.asksaveasfilename(title='Выберите место сохранения файла', defaultextension='.json')
-# Записываем объединенные данные в новый файл
-with open(save_path, 'w') as merged_file:
-    json.dump(data, merged_file, indent=4)
+
+def merge_favorite_scripts(root_directory):
+    data = {}
+    file_paths = []  # Список путей к объединяемым файлам
+    for root, dirs, files in os.walk(root_directory):
+        for file in files:
+            if file == "favorite.json":
+                file_path = os.path.join(root, file)
+                with open(file_path, 'r') as f:
+                    favorite_data = json.load(f)
+                    data.update(favorite_data)
+                file_paths.append(file_path)  # Добавляем путь к файлу в список
+    return data, file_paths
+
+# Ввод пути к корневой директории через консоль
+root_directory = input("Введите путь к корневой директории: ")
+
+# Вызываем функцию для объединения скриптов и получения путей файлов
+merged_data, file_paths = merge_favorite_scripts(root_directory)
+
+# Выводим пути файлов, которые будут объединены
+print("Обнаружены следующие файлы для объединения:")
+for file_path in file_paths:
+    print(file_path)
+
+# Подтверждение сохранения файла
+confirm = input("Хотите сохранить объединенный файл? (yes/no): ")
+if confirm.lower() == "yes":
+    # Ввод пути для сохранения файла через консоль
+    save_directory = input("Введите путь для сохранения файла: ")
+    save_path = os.path.join(save_directory, "merged_favorite.json")
+
+    # Записываем объединенные данные в новый файл
+    with open(save_path, 'w') as merged_file:
+        json.dump(merged_data, merged_file, indent=4)
+    print("Файл успешно сохранен по пути:", save_path)
+else:
+    print("Сохранение отменено.")
