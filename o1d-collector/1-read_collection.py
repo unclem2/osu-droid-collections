@@ -5,6 +5,7 @@ import os
 import sys
 from termcolor import colored
 import stat
+import subprocess
 
 OUTPUT_DIR = "output/hashes"  # Название папки для сохранения вывода
 
@@ -64,3 +65,17 @@ if __name__ == "__main__":
                     print(colored("Invalid choice. Please enter a valid number.", "red"))
             except ValueError:
                 print(colored("Invalid choice. Please enter a valid number.", "red"))
+
+
+
+# Определяем путь к текущей директории
+current_dir = os.path.dirname(os.path.abspath(__file__))
+
+# Путь к файлу, который нужно запустить
+script_path = os.path.join(current_dir, "2-create_collection.py")
+
+# Запускаем другой код
+subprocess.call(["python", script_path])
+
+# Код, который будет выполняться после завершения другого кода
+print("Запуск другого кода завершен")
