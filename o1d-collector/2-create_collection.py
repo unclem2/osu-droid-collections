@@ -6,7 +6,7 @@ from tqdm import tqdm
 from termcolor import colored
 from concurrent.futures import ThreadPoolExecutor
 
-k = "f9609716f769c97b6d02603570b1c95cab912593"  # osu!api key  https://osu.ppy.sh/home/account/edit#legacy-api
+k = ""  # osu!api key  https://osu.ppy.sh/home/account/edit#legacy-api
 
 def get_beatmapset_info(hash):
     url = f"https://osu.ppy.sh/api/get_beatmaps?k={k}&h={hash}"
