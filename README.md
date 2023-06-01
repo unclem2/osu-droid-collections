@@ -8,3 +8,4 @@ TODO
 - translation on english
 - fix some bugs
 - osdb convertation smh
+- android support
