@@ -19,7 +19,7 @@ if you want to download maps from collection then open menu.py, tap 2, tap 3 and
 script using chimu api(ацивев если ты это читаешь то извини за то что я нагружаю чиму мультипоточностью)
 all other script are not necessary but kinda useful and im lazy asf to describe it
 
-
+ЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬ
 
 
 
