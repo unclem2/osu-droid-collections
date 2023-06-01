@@ -1,7 +1,12 @@
 import buffer
+import requests
 import json
+import os
 import sys
 from termcolor import colored
+import stat
+
+OUTPUT_DIR = "output/hashes"  # Название папки для сохранения вывода
 
 def collection_to_dict(filename):
     collections = {}
@@ -18,14 +23,44 @@ def collection_to_dict(filename):
                 for i in range(collection["size"]):
                     collection["hashes"].append(buffer.read_string(db))
                 collections["collections"].append(collection)
-            with open("hashes.json", "w") as f:
-                json.dump(collection["hashes"], f)
+
+        os.makedirs(OUTPUT_DIR, exist_ok=True)
+        output_path = os.path.join(OUTPUT_DIR, "hashes.json")
+
+        with open(output_path, "w") as f:
+            json.dump(collections, f, indent=2)
+            print(colored(f"Output saved to: {output_path}", "green"))
+
+        os.chmod(OUTPUT_DIR, stat.S_IRWXU | stat.S_IRWXG | stat.S_IRWXO)  # Установка разрешений для папки
     except Exception as e:
         print(colored("Error:", "red"), colored(e, "red"))
+
     return collections
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print(colored("Invalid args:", "red"), colored("read_collection.py <filename>", "red"))
+    db_files = [f for f in os.listdir() if f.endswith(".db")]
+    if len(db_files) == 0:
+        print(colored("Error:", "red"), "No .db files found in the current directory.")
+    elif len(db_files) == 1:
+        db_file = db_files[0]
+        print(colored("Processing collection file:", "blue"), db_file)
+        print(json.dumps(collection_to_dict(db_file), indent=2))
     else:
-        print(json.dumps(collection_to_dict(sys.argv[1]), indent=2))
+        print(colored("Multiple .db files found in the current directory. Please select the file to process:", "yellow"))
+        for i, db_file in enumerate(db_files):
+            print(f"{i+1}. {db_file}")
+        while True:
+            choice = input("Enter the number of the file to process (or 'q' to quit): ")
+            if choice.lower() == "q":
+                sys.exit()
+            try:
+                choice = int(choice)
+                if 1 <= choice <= len(db_files):
+                    db_file = db_files[choice-1]
+                    print(colored("Processing collection file:", "blue"), db_file)
+                    print(json.dumps(collection_to_dict(db_file), indent=2))
+                    break
+                else:
+                    print(colored("Invalid choice. Please enter a valid number.", "red"))
+            except ValueError:
+                print(colored("Invalid choice. Please enter a valid number.", "red"))
