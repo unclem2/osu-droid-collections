@@ -9,3 +9,4 @@ TODO
 - fix some bugs
 - osdb convertation smh
 - android support
+- setup.sh for termux and linux
