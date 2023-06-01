@@ -4,6 +4,7 @@ import os
 import stat
 from tqdm import tqdm
 from termcolor import colored
+from concurrent.futures import ThreadPoolExecutor
 
 k = "f9609716f769c97b6d02603570b1c95cab912593"  # osu!api key  https://osu.ppy.sh/home/account/edit#legacy-api
 
@@ -31,13 +32,15 @@ def process_category(category):
     beatmapset_ids = []
 
     print(colored("Getting beatmapset info...", "blue"))
-    for hash in tqdm(hashes, desc=colored("Getting Beatmapset Info", "cyan")):
-        beatmapset_info = get_beatmapset_info(hash)
-        if beatmapset_info is not None:
-            beatmapset_infos.append(beatmapset_info)
-            beatmapset_id = beatmapset_info['beatmapset_id']
-            if beatmapset_id not in beatmapset_ids:
-                beatmapset_ids.append(beatmapset_id)
+    with ThreadPoolExecutor() as executor:
+        futures = [executor.submit(get_beatmapset_info, hash) for hash in hashes]
+        for future in tqdm(futures, total=len(hashes), desc=colored("Getting Beatmapset Info", "cyan")):
+            beatmapset_info = future.result()
+            if beatmapset_info is not None:
+                beatmapset_infos.append(beatmapset_info)
+                beatmapset_id = beatmapset_info['beatmapset_id']
+                if beatmapset_id not in beatmapset_ids:
+                    beatmapset_ids.append(beatmapset_id)
 
     print(colored(f"Got {len(beatmapset_infos)} beatmapset infos for {len(beatmapset_ids)} beatmapset IDs.", "green"))
     output_dir = os.path.join("output", "collections")
