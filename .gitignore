@@ -4,3 +4,6 @@
 
 *.db
 tree.txt
+*.txt
+.gitignore
+*.osz

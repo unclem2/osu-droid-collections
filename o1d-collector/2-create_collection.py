@@ -6,7 +6,11 @@ from tqdm import tqdm
 from termcolor import colored
 from concurrent.futures import ThreadPoolExecutor
 
-k = ""  # osu!api key  https://osu.ppy.sh/home/account/edit#legacy-api
+def get_api_key():
+    with open("api_key.txt", "r") as f:
+        return f.read().strip()
+
+k = get_api_key()
 
 def get_beatmapset_info(hash):
     url = f"https://osu.ppy.sh/api/get_beatmaps?k={k}&h={hash}"
@@ -21,6 +25,9 @@ def get_beatmapset_info(hash):
             }
             return beatmapset_info
     return None
+
+# Остальной код остается неизменным
+
 
 def process_category(category):
     name = category["name"]

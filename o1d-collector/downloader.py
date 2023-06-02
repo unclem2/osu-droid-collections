@@ -6,6 +6,7 @@ from urllib.parse import unquote
 from tqdm import tqdm
 from termcolor import colored
 import threading
+import subprocess
 
 # Очищаем экран
 if os.name == 'nt':
@@ -95,7 +96,9 @@ with open(collection_file, 'r') as f:
         stop_event = threading.Event()  # Событие для остановки загрузки
 
         def check_user_input():
-            input("Нажмите Enter для остановки загрузки...")
+            while True:
+                if input() or stop_event.is_set():
+                    break
             stop_event.set()  # Установка события остановки
 
         # Запускаем поток для проверки ввода пользователя
@@ -111,8 +114,12 @@ with open(collection_file, 'r') as f:
                     future = executor.submit(download_beatmap, beatmap_id)
                     futures.append(future)
 
+                completed = 0
                 for future in concurrent.futures.as_completed(futures):
                     pbar.update(1)
+                    completed += 1
+                    if completed >= len(futures):
+                        stop_event.set()  # Установка события остановки после завершения всех задач
 
         # Ожидаем завершения потока проверки ввода
         input_thread.join()
