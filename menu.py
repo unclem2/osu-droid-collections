@@ -1,69 +1,72 @@
 import os
-import pickle
-from colorama import init, Fore, Style
+from colorama import init, Fore
 
-init() # инициализация colorama
-
-# Определяем текущую директорию
-current_dir = os.path.dirname(os.path.abspath(__file__))
-
-# Проверяем, есть ли файл со списком скриптов, и если есть, загружаем его
-scripts_file_path = os.path.join(current_dir, 'scripts.pickle')
-if os.path.exists(scripts_file_path):
-    with open(scripts_file_path, 'rb') as f:
-        scripts = pickle.load(f)
-else:
-    scripts = {}
-
-def run_script():
-    print(Fore.BLUE + "Список скриптов:")
-    for i, script_name in enumerate(scripts):
-        print(Fore.YELLOW + f"{i+1}. {script_name}: {scripts[script_name]}" + Style.RESET_ALL)
-    choice = input(Fore.GREEN + "Выберите номер скрипта для запуска: " + Style.RESET_ALL)
-    try:
-        script_num = int(choice)
-        script_name = list(scripts.keys())[script_num-1]
-        script_relative_path = scripts[script_name]
-        script_path = os.path.join(current_dir, script_relative_path)
-        os.system(f"python {script_path}")
-    except (ValueError, IndexError):
-        print(Fore.RED + "Неверный выбор скрипта" + Style.RESET_ALL)
+# Инициализация colorama для поддержки цветов в консоли
+init()
 
 def show_menu():
-    print(Fore.BLUE + "1. Запустить скрипт")
-    print("2. Показать меню")
-    print("3. Удалить скрипт")
-    print("4. Выход" + Style.RESET_ALL)
+    print(Fore.CYAN + "--- МЕНЮ ---")
+    print("1. Показать все элементы")
+    print("2. Запустить скрипт")
+    print("3. Выход")
 
-def show_scripts():
-    print(Fore.BLUE + "Список скриптов:")
-    for script_name in scripts:
-        print(Fore.YELLOW + f"{script_name}: {scripts[script_name]}" + Style.RESET_ALL)
+def show_all_items():
+    print(Fore.YELLOW + "--- Все элементы ---")
+    # Здесь можно добавить логику для вывода всех элементов
 
-def delete_script():
-    script_name = input(Fore.GREEN + "Введите название скрипта для удаления: " + Style.RESET_ALL)
-    if script_name in scripts:
-        del scripts[script_name]
-        with open(scripts_file_path, 'wb') as f:
-            pickle.dump(scripts, f)
-        print(Fore.GREEN + f"Скрипт \"{script_name}\" успешно удален" + Style.RESET_ALL)
-    else:
-        print(Fore.RED + f"Скрипт \"{script_name}\" не найден" + Style.RESET_ALL)
+def run_script(script_path):
+    print(Fore.GREEN + f"--- Запуск скрипта {script_path} ---")
+    # Здесь можно добавить логику для запуска скрипта
+    # Например, можно использовать функцию os.system() для запуска скрипта
+    os.system(script_path)
 
-def main():
-    while True:
-        show_menu()
-        choice = input(Fore.GREEN + "Выберите пункт меню: " + Style.RESET_ALL)
-        if choice == '1':
-            run_script()
-        elif choice == '2':
-            show_scripts()
-        elif choice == '3':
-            delete_script()
-        elif choice == '4':
-            break
+# Словарь с путями к скриптам
+script_paths = {
+    "1": "o1d-collector/1-read_collection.py",
+    "2": "o1d-collector/downloader.py",
+    "3": "o1d-collector/exporter.py",
+    "4": "o1d-collector/jsonmerger.py",
+    "5": "o1d-collector/duplicate_cleaner.py"
+}
+
+# Словарь с именами скриптов
+script_names = {
+    "1": "Конвертация коллекции",
+    "2": "Загрузчик карт по коллекции",
+    "3": "Экспорт коллекций",
+    "4": "Объединение json файлов",
+    "5": "Очистка дубликатов карт"
+}
+
+# Получение текущей директории
+current_directory = os.path.dirname(os.path.abspath(__file__))
+
+# Преобразование путей скриптов в относительные пути
+for key in script_paths:
+    script_paths[key] = os.path.join(current_directory, script_paths[key])
+
+# Главный цикл программы
+while True:
+    show_menu()
+    choice = input(Fore.MAGENTA + "Выберите пункт меню: ")
+    
+    if choice == "1":
+        show_all_items()
+    elif choice == "2":
+        print(Fore.YELLOW + "--- Доступные скрипты ---")
+        for key in script_paths:
+            print(f"{Fore.GREEN}{key}. {script_names[key]}")
+        script_choice = input(Fore.MAGENTA + "Выберите скрипт: ")
+        if script_choice in script_paths:
+            script_path = script_paths[script_choice]
+            if os.path.exists(script_path):
+                run_script(script_path)
+            else:
+                print(Fore.RED + "Указанный скрипт не найден.")
         else:
-            print(Fore.RED + "Неверный выбор, попробуйте еще раз" + Style.RESET_ALL)
-
-if __name__ == '__main__':
-    main()
+            print(Fore.RED + "Некорректный выбор скрипта.")
+    elif choice == "3":
+        print(Fore.YELLOW + "Выход из программы...")
+        break
+    else:
+        print(Fore.RED + "Некорректный выбор. Пожалуйста, попробуйте снова.")
