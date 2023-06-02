@@ -1,4 +1,5 @@
 import os
+import subprocess
 from colorama import init, Fore
 
 # Инициализация colorama для поддержки цветов в консоли
@@ -16,9 +17,12 @@ def show_all_items():
 
 def run_script(script_path):
     print(Fore.GREEN + f"--- Запуск скрипта {script_path} ---")
-    # Здесь можно добавить логику для запуска скрипта
-    # Например, можно использовать функцию os.system() для запуска скрипта
-    os.system(script_path)
+    try:
+        subprocess.run(["python", script_path], check=True)
+    except subprocess.CalledProcessError as e:
+        print(Fore.RED + f"Ошибка при выполнении скрипта: {e}")
+    except Exception as e:
+        print(Fore.RED + f"Ошибка: {e}")
 
 # Словарь с путями к скриптам
 script_paths = {
