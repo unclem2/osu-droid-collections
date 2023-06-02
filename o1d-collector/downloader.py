@@ -121,4 +121,3 @@ with open(collection_file, 'r') as f:
         print(colored(f"Ошибка: Файл '{collection_file}' не содержит список beatmap IDs.", "red"))
 
 print(colored("Скрипт завершен.", "cyan"))
-
