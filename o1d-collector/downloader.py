@@ -28,6 +28,9 @@ custom_directory = input("Введите путь к директории (ос�
 # Использование пользовательского пути, если указан
 if custom_directory:
     songs_dir = find_songs_directory(custom_directory)
+    if songs_dir:
+        print(colored(f"Найдена папка 'Songs' в указанном пути. Поиск отменен.", "yellow"))
+        songs_dir = None
 else:
     current_dir = os.getcwd()
     songs_dir = find_songs_directory(current_dir)
@@ -118,3 +121,4 @@ with open(collection_file, 'r') as f:
         print(colored(f"Ошибка: Файл '{collection_file}' не содержит список beatmap IDs.", "red"))
 
 print(colored("Скрипт завершен.", "cyan"))
+
