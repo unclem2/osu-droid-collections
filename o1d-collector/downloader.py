@@ -16,20 +16,37 @@ else:
 url = "https://api.chimu.moe/v1/download/"
 collections_dir = os.path.join("output", "collections")
 
-# Создаем директорию для хранения карт
-if not os.path.exists("Songs"):
-    os.makedirs("Songs")
+def find_songs_directory(directory):
+    for root, dirs, files in os.walk(directory):
+        if "Songs" in dirs:
+            return os.path.join(root, "Songs")
+    return None
+
+# Запрос пути директории у пользователя
+custom_directory = input("Введите путь к директории (оставьте пустым для поиска в текущей директории): ")
+
+# Использование пользовательского пути, если указан
+if custom_directory:
+    songs_dir = find_songs_directory(custom_directory)
+else:
+    current_dir = os.getcwd()
+    songs_dir = find_songs_directory(current_dir)
+
+# Создание папки "Songs", если не найдена
+if songs_dir is None:
+    songs_dir = os.path.join(current_dir, "Songs")
+    os.makedirs(songs_dir)
 
 def download_beatmap(beatmap_id):
     download_url = f"{url}{beatmap_id}"
     response = requests.get(download_url)
     if response.ok:
         filename = unquote(response.headers.get('content-disposition').split('filename=')[1])
-        file_path = os.path.join("Songs", filename)
+        file_path = os.path.join(songs_dir, filename)
         if os.path.isfile(file_path):
             print(colored(f"Карта {filename} уже существует в директории!", "yellow"))
             return
-        elif os.path.isdir(os.path.join("Songs", filename.split('.')[0])):
+        elif os.path.isdir(os.path.join(songs_dir, filename.split('.')[0])):
             print(colored(f"Папка {filename.split('.')[0]} уже существует в директории!", "yellow"))
             return
         with open(file_path, 'wb') as f:
