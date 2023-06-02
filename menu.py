@@ -28,7 +28,7 @@ def run_script(script_path):
 script_paths = {
     "1": "o1d-collector/1-read_collection.py",
     "2": "o1d-collector/downloader.py",
-    "3": "o1d-collector/exporter.py",
+    "3": "misc/exporter.py",
     "4": "o1d-collector/jsonmerger.py",
     "5": "o1d-collector/duplicate_cleaner.py"
 }
