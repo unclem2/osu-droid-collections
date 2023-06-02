@@ -1,8 +1,6 @@
 import os
 import pickle
 from colorama import init, Fore, Style
-from tkinter import filedialog
-import tkinter as tk
 
 init() # инициализация colorama
 
@@ -16,23 +14,6 @@ if os.path.exists(scripts_file_path):
         scripts = pickle.load(f)
 else:
     scripts = {}
-
-def add_script():
-    # Создаем диалоговое окно для выбора файла скрипта
-    root = tk.Tk()
-    root.withdraw()
-    file_path = filedialog.askopenfilename(initialdir=current_dir)
-    if not file_path:
-        print(Fore.RED + "Файл не выбран" + Style.RESET_ALL)
-        return
-    name = input(Fore.GREEN + "Введите название скрипта: " + Style.RESET_ALL)
-    # Получаем относительный путь к скрипту
-    relative_path = os.path.relpath(file_path, current_dir)
-    scripts[name] = relative_path
-    # Сохраняем список скриптов в файл
-    with open(scripts_file_path, 'wb') as f:
-        pickle.dump(scripts, f)
-    print(Fore.GREEN + f"Скрипт \"{name}\" успешно добавлен в меню" + Style.RESET_ALL)
 
 def run_script():
     print(Fore.BLUE + "Список скриптов:")
@@ -49,11 +30,10 @@ def run_script():
         print(Fore.RED + "Неверный выбор скрипта" + Style.RESET_ALL)
 
 def show_menu():
-    print(Fore.BLUE + "1. Добавить скрипт")
-    print("2. Запустить скрипт")
-    print("3. Показать меню")
-    print("4. Удалить скрипт")
-    print("5. Выход" + Style.RESET_ALL)
+    print(Fore.BLUE + "1. Запустить скрипт")
+    print("2. Показать меню")
+    print("3. Удалить скрипт")
+    print("4. Выход" + Style.RESET_ALL)
 
 def show_scripts():
     print(Fore.BLUE + "Список скриптов:")
@@ -75,14 +55,12 @@ def main():
         show_menu()
         choice = input(Fore.GREEN + "Выберите пункт меню: " + Style.RESET_ALL)
         if choice == '1':
-            add_script()
-        elif choice == '2':
             run_script()
-        elif choice == '3':
+        elif choice == '2':
             show_scripts()
-        elif choice == '4':
+        elif choice == '3':
             delete_script()
-        elif choice == '5':
+        elif choice == '4':
             break
         else:
             print(Fore.RED + "Неверный выбор, попробуйте еще раз" + Style.RESET_ALL)
