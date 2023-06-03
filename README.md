@@ -16,25 +16,15 @@
 # Установка и настройка
 - Скачайте [Termux](https://github.com/termux/termux-app/releases/download/v0.118.0/termux-app_v0.118.0+github-debug_universal.apk) (обязательно с GitHub) 
 ```bash
+# Установка python3 в Termux
 pkg update
-pkg upgrade
-```
-```bash
-pkg install git
-```
-```bash
-git clone https://github.com/unclem2/osu-droid-collections
-```
-```bash
+pkg install python3
+
+termux-setup-storage
+cd ~/storage/shared/osu!\droid/
+git clone https://github.com/unclem2/osu-droid-collections.git
 cd osu-droid-collections
-```
-```bash
-bash setup.sh
-```
-```bash
-cp ~/osu-droid-collections -r ~/storage/shared/osu\!droid/ 
-cd ..
-cd ~/storage/shared/osu\!droid/osu-droid-collections
+python3 -m pip install -r requirements.txt
 ```
 Получите osu!api ключ на сайте https://osu.ppy.sh/home/account/edit#new-oauth-application
 
@@ -48,10 +38,17 @@ nano api_key.txt
 python menu.py
 ```
 
+## Использование
+=======
+
 --- Доступные скрипты ---
+
 1. Конвертация коллекции
 2. Загрузчик карт по коллекции
 3. Экспорт коллекций
 4. Объединение json файлов
 5. Очистка дубликатов карт
+
+=======
+
 
