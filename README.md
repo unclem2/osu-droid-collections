@@ -17,24 +17,20 @@
 - Скачайте [Termux](https://github.com/termux/termux-app/releases/download/v0.118.0/termux-app_v0.118.0+github-debug_universal.apk) (обязательно с GitHub) 
 ```bash
 pkg update
-pkg upgrade
 ```
 ```bash
-pkg install git
+pkg install python
 ```
+```bash
+termux-setup-storage
+```
+```bash
+cd ~/storage/shared/osu\!droid/
 ```bash
 git clone https://github.com/unclem2/osu-droid-collections
 ```
 ```bash
 cd osu-droid-collections
-```
-```bash
-bash setup.sh
-```
-```bash
-cp ~/osu-droid-collections -r ~/storage/shared/osu\!droid/ 
-cd ..
-cd ~/storage/shared/osu\!droid/osu-droid-collections
 ```
 Получите osu!api ключ на сайте https://osu.ppy.sh/home/account/edit#new-oauth-application
 
