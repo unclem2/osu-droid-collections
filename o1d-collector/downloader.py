@@ -6,7 +6,6 @@ from urllib.parse import unquote
 from tqdm import tqdm
 from termcolor import colored
 import threading
-import subprocess
 
 # Очищаем экран
 if os.name == 'nt':
@@ -23,22 +22,19 @@ def find_songs_directory(directory):
             return os.path.join(root, "Songs")
     return None
 
-# Запрос пути директории у пользователя
-custom_directory = input("Введите путь к директории (оставьте пустым для поиска в текущей директории): ")
+# Определение директории скрипта
+script_directory = os.path.dirname(os.path.abspath(__file__))
 
-# Использование пользовательского пути, если указан
-if custom_directory:
-    songs_dir = find_songs_directory(custom_directory)
-    if songs_dir:
-        print(colored(f"Найдена папка 'Songs' в указанном пути. Поиск отменен.", "yellow"))
-        songs_dir = None
-else:
-    current_dir = os.getcwd()
-    songs_dir = find_songs_directory(current_dir)
+# Поиск папки "Songs" на два уровня выше директории скрипта
+parent_directory = os.path.abspath(os.path.join(script_directory, ".."))
+songs_dir = find_songs_directory(parent_directory)
+if songs_dir is None:
+    parent_directory = os.path.abspath(os.path.join(parent_directory, ".."))
+    songs_dir = find_songs_directory(parent_directory)
 
 # Создание папки "Songs", если не найдена
 if songs_dir is None:
-    songs_dir = os.path.join(current_dir, "Songs")
+    songs_dir = os.path.join(parent_directory, "Songs")
     os.makedirs(songs_dir)
 
 def download_beatmap(beatmap_id):
