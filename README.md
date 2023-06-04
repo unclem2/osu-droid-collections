@@ -21,7 +21,7 @@ pkg update
 pkg install python3
 
 termux-setup-storage
-cd ~/storage/shared/osu!\droid/
+cd ~/storage/shared/'osu!droid'/
 git clone https://github.com/unclem2/osu-droid-collections.git
 cd osu-droid-collections
 python3 -m pip install -r requirements.txt
