@@ -7,7 +7,7 @@ from termcolor import colored
 import stat
 import subprocess
 
-OUTPUT_DIR = "output/hashes"  # Название папки для сохранения вывода
+OUTPUT_DIR = "output/hashes"  # Folder name for saving the output
 
 def collection_to_dict(filename):
     collections = {}
@@ -32,7 +32,7 @@ def collection_to_dict(filename):
             json.dump(collections, f, indent=2)
             print(colored(f"Output saved to: {output_path}", "green"))
 
-        os.chmod(OUTPUT_DIR, stat.S_IRWXU | stat.S_IRWXG | stat.S_IRWXO)  # Установка разрешений для папки
+        os.chmod(OUTPUT_DIR, stat.S_IRWXU | stat.S_IRWXG | stat.S_IRWXO)  # Set permissions for the folder
     except Exception as e:
         print(colored("Error:", "red"), colored(e, "red"))
 
@@ -67,15 +67,14 @@ if __name__ == "__main__":
                 print(colored("Invalid choice. Please enter a valid number.", "red"))
 
 
-
-# Определяем путь к текущей директории
+# Determine the current directory path
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
-# Путь к файлу, который нужно запустить
+# Path to the file to be executed
 script_path = os.path.join(current_dir, "2-create_collection.py")
 
-# Запускаем другой код
+# Run the other code
 subprocess.call(["python", script_path])
 
-# Код, который будет выполняться после завершения другого кода
-print("Запуск другого кода завершен")
+# Code to be executed after the other code finishes
+print("Execution of the other code is complete")
