@@ -26,8 +26,7 @@ def get_beatmapset_info(hash):
             return beatmapset_info
     return None
 
-# Остальной код остается неизменным
-
+# Remaining code remains unchanged
 
 def process_category(category):
     name = category["name"]
