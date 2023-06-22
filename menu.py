@@ -2,29 +2,29 @@ import os
 import subprocess
 from colorama import init, Fore
 
-# Инициализация colorama для поддержки цветов в консоли
+# Initialize colorama to support colors in the console
 init()
 
 def show_menu():
-    print(Fore.CYAN + "--- МЕНЮ ---")
-    print("1. Показать все элементы")
-    print("2. Запустить скрипт")
-    print("3. Выход")
+    print(Fore.CYAN + "--- MENU ---")
+    print("1. Show all items")
+    print("2. Run script")
+    print("3. Exit")
 
 def show_all_items():
-    print(Fore.YELLOW + "--- Все элементы ---")
-    # Здесь можно добавить логику для вывода всех элементов
+    print(Fore.YELLOW + "--- All items ---")
+    # Add logic here to display all items
 
 def run_script(script_path):
-    print(Fore.GREEN + f"--- Запуск скрипта {script_path} ---")
+    print(Fore.GREEN + f"--- Running script {script_path} ---")
     try:
         subprocess.run(["python", script_path], check=True)
     except subprocess.CalledProcessError as e:
-        print(Fore.RED + f"Ошибка при выполнении скрипта: {e}")
+        print(Fore.RED + f"Error executing script: {e}")
     except Exception as e:
-        print(Fore.RED + f"Ошибка: {e}")
+        print(Fore.RED + f"Error: {e}")
 
-# Словарь с путями к скриптам
+# Dictionary with script paths
 script_paths = {
     "1": "o1d-collector/1-read_collection.py",
     "2": "o1d-collector/downloader.py",
@@ -33,44 +33,44 @@ script_paths = {
     "5": "o1d-collector/duplicate_cleaner.py"
 }
 
-# Словарь с именами скриптов
+# Dictionary with script names
 script_names = {
-    "1": "Конвертация коллекции",
-    "2": "Загрузчик карт по коллекции",
-    "3": "Экспорт коллекций",
-    "4": "Объединение json файлов",
-    "5": "Очистка дубликатов карт"
+    "1": "Convert Collection",
+    "2": "Map Downloader",
+    "3": "Collection Exporter",
+    "4": "JSON File Merger",
+    "5": "Map Duplicate Cleaner"
 }
 
-# Получение текущей директории
+# Get the current directory
 current_directory = os.path.dirname(os.path.abspath(__file__))
 
-# Преобразование путей скриптов в относительные пути
+# Convert script paths to relative paths
 for key in script_paths:
     script_paths[key] = os.path.join(current_directory, script_paths[key])
 
-# Главный цикл программы
+# Main program loop
 while True:
     show_menu()
-    choice = input(Fore.MAGENTA + "Выберите пункт меню: ")
+    choice = input(Fore.MAGENTA + "Select an option: ")
     
     if choice == "1":
         show_all_items()
     elif choice == "2":
-        print(Fore.YELLOW + "--- Доступные скрипты ---")
+        print(Fore.YELLOW + "--- Available Scripts ---")
         for key in script_paths:
             print(f"{Fore.GREEN}{key}. {script_names[key]}")
-        script_choice = input(Fore.MAGENTA + "Выберите скрипт: ")
+        script_choice = input(Fore.MAGENTA + "Select a script: ")
         if script_choice in script_paths:
             script_path = script_paths[script_choice]
             if os.path.exists(script_path):
                 run_script(script_path)
             else:
-                print(Fore.RED + "Указанный скрипт не найден.")
+                print(Fore.RED + "The specified script was not found.")
         else:
-            print(Fore.RED + "Некорректный выбор скрипта.")
+            print(Fore.RED + "Invalid script choice.")
     elif choice == "3":
-        print(Fore.YELLOW + "Выход из программы...")
+        print(Fore.YELLOW + "Exiting the program...")
         break
     else:
-        print(Fore.RED + "Некорректный выбор. Пожалуйста, попробуйте снова.")
+        print(Fore.RED + "Invalid choice. Please try again.")
